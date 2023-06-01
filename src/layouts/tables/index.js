@@ -21,6 +21,10 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
+import TextField from "@mui/material/TextField";
+import MDButton from "components/MDButton";
+import axios from "axios";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,7 +40,66 @@ const style = {
 function Tables() {
   const { columns, rows, showOffers } = authorsTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  const [showAddForm, setShowAddForm] = useState(0);
+  const [newClub, setNewClub] = useState({
+    name: "",
+    description: "",
+    governorate: "",
+    street: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewClub((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleAddClub = (event) => {
+    event.preventDefault();
+
+    // Check if any input field is empty
+    if (
+      !newClub.name ||
+      !newClub.description ||
+      !newClub.governorate ||
+      !newClub.street
+    ) {
+      setErrorMessage("Please fill in all the fields");
+      return;
+    }
+
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem("token");
+
+    // Set the headers with the token
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    // Send a POST request to add the new club
+    axios
+      .post("https://nutrigym.onrender.com/api/v1/club", newClub, { headers })
+      .then((response) => {
+        // Handle the response from the server
+        console.log("New club added:", response.data);
+        // Reset the form and update the club count
+        setNewClub({
+          name: "",
+          description: "",
+          governorate: "",
+          street: "",
+        });
+        setErrorMessage(""); // Clear the error message
+      })
+      .catch((error) => {
+        console.error("Error adding new club:", error);
+        setErrorMessage("Error adding new club. Please try again."); // Set the error message
+      });
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -49,6 +112,8 @@ function Tables() {
                 mt={-3}
                 py={3}
                 px={2}
+                display="flex"
+                justifyContent="space-between"
                 variant="#839A4C"
                 bgColor="#839A4C"
                 borderRadius="lg"
@@ -57,7 +122,24 @@ function Tables() {
                 <MDTypography variant="h6" color="white">
                   Clubs Table
                 </MDTypography>
+                <div
+                  style={{
+                    background: "white",
+                    width: "10%",
+                    borderRadius: 10,
+                  }}
+                >
+                  <Button
+                    style={{ color: "#839A4C" }}
+                    onClick={() => {
+                      setShowAddForm(1);
+                    }}
+                  >
+                    Add Club
+                  </Button>
+                </div>
               </MDBox>
+
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}
@@ -90,6 +172,7 @@ function Tables() {
                     Clubs offers
                   </MDTypography>
                 </MDBox>
+
                 <MDBox pt={3}>
                   <DataTable
                     table={{ columns, rows }}
@@ -103,6 +186,73 @@ function Tables() {
             </Grid>
           </Grid>
         </MDBox>
+      ) : null}
+
+      {showAddForm === 1 ? (
+        <Grid container justifyContent="center">
+          <Grid item xs={12} md={6}>
+            <MDBox mb={1.5}>
+              <form onSubmit={handleAddClub}>
+                <Card>
+                  <MDBox p={2}>
+                    <Typography variant="h6" color="#839A4C" align="center">
+                      Add Club
+                    </Typography>
+                    <MDBox mt={2.5}>
+                      <TextField
+                        label="Club Name"
+                        name="name"
+                        value={newClub.name}
+                        fullWidth
+                        onChange={handleInputChange}
+                      />
+                    </MDBox>
+                    <MDBox mt={2.5}>
+                      <TextField
+                        label="Description"
+                        name="description"
+                        value={newClub.description}
+                        fullWidth
+                        onChange={handleInputChange}
+                      />
+                    </MDBox>
+                    <MDBox mt={2.5}>
+                      <TextField
+                        label="Governorate"
+                        name="governorate"
+                        value={newClub.governorate}
+                        fullWidth
+                        onChange={handleInputChange}
+                      />
+                    </MDBox>
+                    <MDBox mt={2.5} mb={2.5}>
+                      <TextField
+                        label="Street"
+                        name="street"
+                        value={newClub.street}
+                        fullWidth
+                        onChange={handleInputChange}
+                      />
+                    </MDBox>
+                    <MDBox display="flex" justifyContent="center">
+                      <Button
+                        type="submit"
+                        style={{ backgroundColor: "#839A4C", color: "white" }}
+                      >
+                        Add Club
+                      </Button>
+                    </MDBox>
+                    {errorMessage && (
+                      <Typography variant="body2" color="error" align="center">
+                        {errorMessage}
+                      </Typography>
+                    )}
+                  </MDBox>
+                </Card>
+              </form>
+            </MDBox>
+          </Grid>
+        </Grid>
       ) : null}
     </DashboardLayout>
   );
