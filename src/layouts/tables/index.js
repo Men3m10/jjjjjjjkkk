@@ -156,7 +156,7 @@ function Tables() {
                 <div
                   style={{
                     background: "white",
-                    width: "10%",
+                    width: 110,
                     borderRadius: 10,
                   }}
                 >
