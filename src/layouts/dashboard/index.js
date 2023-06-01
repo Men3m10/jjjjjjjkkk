@@ -20,12 +20,7 @@ function Dashboard() {
   const [Options, setOptions] = useState([]);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [phyClinicOptions, setPhyClinicOptions] = useState([]);
-  const [newClub, setNewClub] = useState({
-    name: "",
-    description: "",
-    governorate: "",
-    street: "",
-  });
+
   const [newClinic, setNewClinic] = useState({
     name: "",
     description: "",
@@ -176,42 +171,6 @@ function Dashboard() {
     if (serviceOptions.length > 0) {
     }
   }, [serviceOptions]);
-
-  const handleAddClub = (event) => {
-    event.preventDefault();
-
-    // Retrieve the token from localStorage
-    const token = localStorage.getItem("token");
-
-    // Set the headers with the token
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
-    // Send a POST request to add the new club
-    fetch("https://nutrigym.onrender.com/api/v1/club", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(newClub),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from the server
-        console.log("New club added:", data);
-        // Reset the form and update the club count
-        setNewClub({
-          name: "",
-          description: "",
-          governorate: "",
-          street: "",
-        });
-      })
-      .catch((error) => {
-        console.error("Error adding new club:", error);
-      });
-    console.log(setNewClub);
-  };
 
   const handleAddClinic = (event) => {
     event.preventDefault();
@@ -397,13 +356,6 @@ function Dashboard() {
       });
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewClub((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
   const handleClinicInputChange = (event) => {
     const { name, value } = event.target;
     setNewClinic((prevState) => ({
@@ -514,65 +466,6 @@ function Dashboard() {
         </Grid>
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={1.5}>
-                <form onSubmit={handleAddClub}>
-                  <MDBox
-                    color="white"
-                    bgColor="white"
-                    variant="gradient"
-                    borderRadius="lg"
-                    shadow="lg"
-                    p={2}
-                  >
-                    <MDBox mt={2.5}>
-                      <TextField
-                        label="Club Name"
-                        name="name"
-                        value={newClub.name}
-                        onChange={handleInputChange}
-                        fullWidth
-                      />
-                    </MDBox>
-                    <MDBox mt={2.5}>
-                      <TextField
-                        label="Description"
-                        name="description"
-                        value={newClub.description}
-                        onChange={handleInputChange}
-                        fullWidth
-                      />
-                    </MDBox>
-                    <MDBox mt={2.5}>
-                      <TextField
-                        label="Governorate"
-                        name="governorate"
-                        value={newClub.governorate}
-                        onChange={handleInputChange}
-                        fullWidth
-                      />
-                    </MDBox>
-                    <MDBox mt={2.5} mb={2.5}>
-                      <TextField
-                        label="Street"
-                        name="street"
-                        value={newClub.street}
-                        onChange={handleInputChange}
-                        fullWidth
-                      />
-                    </MDBox>
-                    <MDButton
-                      type="submit"
-                      variant="contained"
-                      color="info"
-                      fullWidth
-                    >
-                      Add Club
-                    </MDButton>
-                  </MDBox>
-                </form>
-              </MDBox>
-            </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={1.5}>
                 <form onSubmit={handleAddClinic}>
