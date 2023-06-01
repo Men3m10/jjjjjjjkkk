@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 
@@ -39,7 +40,6 @@ const style = {
 
 function Tables() {
   const { columns, rows, showOffers } = authorsTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
   const [showAddForm, setShowAddForm] = useState(0);
   const [newClub, setNewClub] = useState({
     name: "",
@@ -48,7 +48,7 @@ function Tables() {
     street: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
-
+  const navigate = useNavigate();
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewClub((prevState) => ({
@@ -94,12 +94,43 @@ function Tables() {
           street: "",
         });
         setErrorMessage(""); // Clear the error message
+        setShowAddForm(0); // Hide the add form and trigger useEffect
+        navigate("/dashboard"); // Navigate to the dashboard
       })
       .catch((error) => {
         console.error("Error adding new club:", error);
         setErrorMessage("Error adding new club. Please try again."); // Set the error message
       });
   };
+
+  useEffect(() => {
+    if (showAddForm === 0) {
+      // Only perform the update if showAddForm is 0 (to avoid infinite loop)
+
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem("token");
+
+      // Set the headers with the token
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      // Send a GET request to fetch the updated club data
+      axios
+        .get("https://nutrigym.onrender.com/api/v1/club", { headers })
+        .then((response) => {
+          // Handle the response from the server
+          console.log("Updated club data:", response.data);
+          // Update the rows state with the updated club data
+          setRows(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching club data:", error);
+        });
+    }
+  }, [showAddForm]);
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
