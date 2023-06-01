@@ -3,6 +3,7 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Clinics from "layouts/clinicTable";
 import PhyClinics from "layouts/phyClinicTable";
+import Products from "layouts/products";
 
 import Billing from "layouts/billing";
 import RTL from "layouts/rtl";
@@ -55,6 +56,14 @@ const routes = [
     route: "/phyclinic-tables",
     component: <PhyClinics />,
   },
+  {
+    type: "collapse",
+    name: "products",
+    key: "products-table",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/products-tables",
+    component: <Products />,
+  },
   // {
   //   type: "collapse",
   //   name: "Billing",
@@ -65,12 +74,21 @@ const routes = [
   // },
   {
     type: "collapse",
+    name: "Add Admin",
+    key: "register",
+    icon: <Icon fontSize="small">person_add</Icon>,
+    route: "/auth/register",
+    component: <Register />,
+  },
+  {
+    type: "collapse",
     name: "Profile",
     key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
+    icon: <Icon fontSize="small">home</Icon>,
     route: "/profile",
     component: <Profile />,
   },
+
   // {
   //   type: "collapse",
   //   name: "Sign In",
@@ -79,22 +97,22 @@ const routes = [
   //   route: "/authentication/sign-in",
   //   component: <SignIn />,
   // },
-  {
-    type: "examples",
-    name: "User Profile",
-    key: "user-profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/user-profile",
-    component: <UserProfile />,
-  },
-  {
-    type: "examples",
-    name: "User Management",
-    key: "user-management",
-    icon: <Icon fontSize="small">list</Icon>,
-    route: "/user-management",
-    component: <UserManagement />,
-  },
+  // {
+  //   type: "examples",
+  //   name: "User Profile",
+  //   key: "user-profile",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/user-profile",
+  //   component: <UserProfile />,
+  // },
+  // {
+  //   type: "examples",
+  //   name: "User Management",
+  //   key: "user-management",
+  //   icon: <Icon fontSize="small">list</Icon>,
+  //   route: "/user-management",
+  //   component: <UserManagement />,
+  // },
   // {
   //   type: "collapse",
   //   name: "Sign Up",

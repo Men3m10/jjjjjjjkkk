@@ -94,12 +94,19 @@ const PasswordReset = () => {
         textError: "",
       });
 
-      if (errors.passwordError === false && errors.confirmationError === false) {
+      if (
+        errors.passwordError === false &&
+        errors.confirmationError === false
+      ) {
         setNotification(true);
       }
     } catch (err) {
       if (err.hasOwnProperty("errors")) {
-        setErrors({ ...errors, error: true, textError: err.errors.password[0] });
+        setErrors({
+          ...errors,
+          error: true,
+          textError: err.errors.password[0],
+        });
       }
       return null;
     }
@@ -127,7 +134,12 @@ const PasswordReset = () => {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form" method="POST" onSubmit={submitHandler}>
+          <MDBox
+            component="form"
+            role="form"
+            method="POST"
+            onSubmit={submitHandler}
+          >
             <MDBox mb={2}>
               <MDInput
                 type="password"

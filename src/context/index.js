@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useContext,
   useReducer,
@@ -6,15 +6,11 @@ import {
   useState,
   useEffect,
 } from "react";
-
-// prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 
-// Material Dashboard 2 React main context
 const MaterialUI = createContext();
 
-// authentication context
 export const AuthContext = createContext({
   isAuthenticated: false,
   login: () => {},
@@ -24,22 +20,18 @@ export const AuthContext = createContext({
 
 const AuthContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const navigate = useNavigate();
   const location = useLocation();
-
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (!token) return;
-
     setIsAuthenticated(true);
     navigate(location.pathname);
   }, []);
 
   useEffect(() => {
     if (!token) return;
-
     setIsAuthenticated(isAuthenticated);
     if (
       location.pathname === "/auth/login" ||
@@ -70,10 +62,35 @@ const AuthContextProvider = ({ children }) => {
   );
 };
 
-// Setting custom name for the context which is visible on react dev tools
-MaterialUI.displayName = "MaterialUIContext";
+AuthContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
-// Material Dashboard 2 React reducer
+const MaterialUIControllerProvider = ({ children }) => {
+  const initialState = {
+    miniSidenav: false,
+    transparentSidenav: false,
+    whiteSidenav: false,
+    sidenavColor: "info",
+    transparentNavbar: true,
+    fixedNavbar: true,
+    openConfigurator: false,
+    direction: "ltr",
+    layout: "dashboard",
+    darkMode: false,
+  };
+
+  const [controller, dispatch] = useReducer(reducer, initialState);
+
+  const value = useMemo(() => [controller, dispatch], [controller, dispatch]);
+
+  return <MaterialUI.Provider value={value}>{children}</MaterialUI.Provider>;
+};
+
+MaterialUIControllerProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 function reducer(state, action) {
   switch (action.type) {
     case "MINI_SIDENAV": {
@@ -112,29 +129,6 @@ function reducer(state, action) {
   }
 }
 
-// Material Dashboard 2 React context provider
-function MaterialUIControllerProvider({ children }) {
-  const initialState = {
-    miniSidenav: false,
-    transparentSidenav: false,
-    whiteSidenav: false,
-    sidenavColor: "info",
-    transparentNavbar: true,
-    fixedNavbar: true,
-    openConfigurator: false,
-    direction: "ltr",
-    layout: "dashboard",
-    darkMode: false,
-  };
-
-  const [controller, dispatch] = useReducer(reducer, initialState);
-
-  const value = useMemo(() => [controller, dispatch], [controller, dispatch]);
-
-  return <MaterialUI.Provider value={value}>{children}</MaterialUI.Provider>;
-}
-
-// Material Dashboard 2 React custom hook for using context
 function useMaterialUIController() {
   const context = useContext(MaterialUI);
 
@@ -147,12 +141,6 @@ function useMaterialUIController() {
   return context;
 }
 
-// Typechecking props for the MaterialUIControllerProvider
-MaterialUIControllerProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-// Context module functions
 const setMiniSidenav = (dispatch, value) =>
   dispatch({ type: "MINI_SIDENAV", value });
 const setTransparentSidenav = (dispatch, value) =>

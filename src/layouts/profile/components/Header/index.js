@@ -1,20 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState, useEffect } from "react";
-
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
@@ -37,11 +20,36 @@ import breakpoints from "assets/theme/base/breakpoints";
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const [profileData, setProfileData] = useState("");
 
+  const fetchProfileData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+      const response = await axios.get(
+        "https://nutrigym.onrender.com/api/v1/users/getMyData",
+        {
+          headers: headers,
+        }
+      );
+      const data = response.data.data;
+      setProfileData(data);
+    } catch (error) {
+      console.error("Error while fetching profile data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
     function handleTabsOrientation() {
@@ -99,10 +107,10 @@ function Header({ children }) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                Richard Davis
+                {profileData.name}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
-                CEO / Co-Founder
+                {profileData.role}
               </MDTypography>
             </MDBox>
           </Grid>

@@ -223,7 +223,7 @@ function Login() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
-            <MDBox mb={1} textAlign="center">
+            {/* <MDBox mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Don&apos;t have an account?{" "}
                 <MDTypography
@@ -237,7 +237,7 @@ function Login() {
                   Sign up
                 </MDTypography>
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>

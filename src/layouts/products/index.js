@@ -13,7 +13,7 @@ import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
+import authorsTableData from "layouts/products/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 
 function Tables() {
@@ -38,7 +38,7 @@ function Tables() {
                 coloredShadow="#839A4C"
               >
                 <MDTypography variant="h6" color="white">
-                  Clubs Table
+                  Products Table
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
