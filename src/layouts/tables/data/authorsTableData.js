@@ -32,6 +32,7 @@ export default function useClubData() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clubId, setClubId] = useState(false);
   const [showOffers, setShowOffers] = useState(0);
+  const [showAddForm, setShowAddForm] = useState(0);
 
   const [editClub, setEditClub] = useState({
     name: "",
@@ -154,11 +155,12 @@ export default function useClubData() {
         <Button
           onClick={() => {
             handleOpen(clubId);
+            setShowAddForm(1);
           }}
         >
           Edit
         </Button>
-        <Modal
+        {/* <Modal
           disableEnforceFocus
           open={open}
           onClose={handleClose}
@@ -232,7 +234,7 @@ export default function useClubData() {
               </MDBox>
             </Grid>
           </Box>
-        </Modal>
+        </Modal> */}
       </div>
     );
   };
@@ -307,5 +309,6 @@ export default function useClubData() {
     columns,
     rows,
     showOffers,
+    showAddForm,
   };
 }
